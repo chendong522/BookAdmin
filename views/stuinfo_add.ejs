@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>学生个人信息</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		h3{
+			text-align: center;
+			font-size:30px;
+			color: red;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<!--路径导航-->
+	<ol class="breadcrumb">
+	  <li><a href="/stuinfo_add">个人信息</a></li>
+	  <li><a href="/stuinfo_add">个人信息添加</a></li>
+	</ol>
+	
+	<!--信息表单区域-->
+	<h3>信息完善</h3>
+	<% if(data){ %>
+		<div class="form-horizontal">
+		  <div class="form-group">
+		    <label for="stunum" class="col-sm-3 control-label">学号：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="stunum"><%- data.stunum %></p>
+		    </div>
+		    <label for="studept" class="col-sm-3 control-label">系别：</label>
+		    <div class="col-sm-3">
+		    <p class="form-control-static" id="studept"><%- data.studept %></p>
+			</div>
+		  </div>
+		  <div class="form-group">
+		    <label for="stuname" class="col-sm-3 control-label">姓名：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="stuname"><%- data.stuname %></p>
+		    </div>
+		     <label for="stusex" class="col-sm-3 control-label">性别：</label>
+		    <div class="col-sm-3">
+		      	<p class="form-control-static" id="stusex"><%- data.stusex %></p>
+		    </div>
+		  </div>
+		   <div class="form-group">
+		    <label for="studate" class="col-sm-3 control-label">出生日期：</label>
+		    <div class="col-sm-3">
+		    	<p class="form-control-static" id="studate"><%- data.studate %></p>
+		    </div>
+		    <label for="stutel" class="col-sm-3 control-label">手机号：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="stutel"><%- data.stutel %></p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="stuemail" class="col-sm-3 control-label">邮箱：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="stuemail"><%- data.stuemail %></p>
+		    </div>
+		    <label for="stuadname" class="col-sm-3 control-label">系统名：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="stuadname"><%- data.stuadname %></p>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		  <label class="col-sm-3 control-label">个人备注留言：</label>
+		    <div class="col-sm-8">
+		      <p class="form-control-static" id="stuother"><%- data.stuother %></p>
+	    	</div>
+	    	</div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-8" style="display: flex;justify-content: center;margin-top: 30px;">
+		      <button type="button" class="btn btn-success" style="margin-right: 10px;" onclick = "location.href='/stuinfo_up'">修改信息</button>
+		      <button type="button" class="btn btn-danger" onclick="location.href='/home'">返回首页</button>
+		    </div>
+		  </div>
+		</div>
+		
+		<% }else{ %>
+			<div class="form-horizontal">
+			  <div class="form-group">
+			    <label for="stunum" class="col-sm-2 control-label">学号：</label>
+			    <div class="col-sm-3">
+			      <input type="text" class="form-control" id="stunum" placeholder="学号">
+			    </div>
+			    <label for="studept" class="col-sm-2 control-label">系别：</label>
+			    <div class="col-sm-3">
+			    <select class="form-control" id="studept">
+				  <option>信息工程系</option>
+				  <option>建筑工程系</option>
+				  <option>商学系</option>
+				  <option>会计系</option>
+				  <option>艺术系</option>
+				</select>
+				</div>
+			  </div>
+			  <div class="form-group">
+			    <label for="stuname" class="col-sm-2 control-label">姓名：</label>
+			    <div class="col-sm-3">
+			      <input type="text" class="form-control" id="stuname" placeholder="姓名">
+			    </div>
+			     <label for="stusex" class="col-sm-2 control-label">性别：</label>
+			    <div class="col-sm-3">
+			      	<label class="radio-inline">
+					  <input type="radio" name="sex" value="男" checked> 男
+					</label>
+					<label class="radio-inline">
+					  <input type="radio" name="sex" value="女"> 女
+					</label>
+			    </div>
+			  </div>
+			   <div class="form-group">
+			    <label for="studate" class="col-sm-2 control-label">出生日期：</label>
+			    <div class="col-sm-3">
+			    	<!--日期选择-->
+			        <div class='col-sm-12'>
+			            <div class="form-group">
+			                <div class='input-group date'>
+			                    <input type='text' class="form-control studate"  id='datetimepicker2' />
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+			                    </span>
+			                </div>
+			            </div>
+			       </div>
+			    </div>
+			    <label for="stutel" class="col-sm-2 control-label">手机号：</label>
+			    <div class="col-sm-3">
+			      <input type="text" class="form-control" id="stutel" placeholder="手机号">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="stuemail" class="col-sm-2 control-label">邮箱：</label>
+			    <div class="col-sm-3">
+			      <input type="text" class="form-control" id="stuemail" placeholder="邮箱">
+			    </div>
+			    <label for="stuadname" class="col-sm-2 control-label">系统名：</label>
+			    <div class="col-sm-3">
+			      <p class="form-control-static" id="stuadname"><%- username %></p>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			  <label class="col-sm-2 control-label">个人备注留言：</label>
+			    <div class="col-sm-8">
+			      <textarea class="form-control xheditor stuother" id="con" rows="6"></textarea>
+		    	</div>
+		    	</div>
+			  <div class="form-group">
+			    <div class="col-sm-offset-2 col-sm-3">
+			      <button type="button" class="btn btn-success" id="stuinfo_add">确认</button>
+			      <button type="button" class="btn btn-danger" onclick="location.href='/stuinfo_add'">返回</button>
+			    </div>
+			  </div>
+			</div>
+			<% } %>
+	
+
+	<script type="text/javascript">
+		$(function(){
+			//日期选择插件
+			$('#datetimepicker2').datetimepicker({
+                locale: 'zh-cn',viewMode: 'days',format: 'YYYY/MM/DD'
+            });
+            
+            
+            //确认信息添加
+            $("#stuinfo_add").click(function(){
+            	$.ajax({
+            		type:"post",
+            		url:"/users/stuinfo_add",
+            		data:{stunum:$("#stunum").val(),studept:$("#studept").val(),stuname:$("#stuname").val(),stusex:$("input:radio:checked").val(),studate:$(".studate").val(),stutel:$("#stutel").val(),stuemail:$("#stuemail").val(),stuadname:$("#stuadname").html(),stuother:$(".stuother").val()},
+            		success:function(data){
+            			data = JSON.parse(data);
+            			//console.log(data);//{code:1,msg:"查询成功",stuadname:系统名}
+            			if(data.code==1){
+            				alert("信息已完善，准备跳转！");
+            				location.href = "/stuinfo_up";
+            			}
+            		}
+            	});
+            })
+		})
+	</script>
+</body>
+</html>

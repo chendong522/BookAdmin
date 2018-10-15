@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>图书借阅</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		.form-inline .form-group,.form-inline .form-control{
+			margin-left: 50px;
+		}
+		.table{
+			width: 1000px;
+			margin: 30px auto;
+		}
+		.table th,.table td{
+			text-align: center;
+		}
+		.pagination{
+			margin-left: 80px;
+		}
+	</style>
+</head>
+<body>
+	<!--图书借阅-->
+	<ol class="breadcrumb">
+	  <li><a href="/stubor">图书借阅</a></li>
+	  <li><a href="/stubor">图书查询</a></li>
+	</ol>
+	
+	<!--图书列表展示-->
+	<table class="table">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>书名</th>
+				<th>作者</th>
+				<th>出版社</th>
+				<th>库存</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% info.map(function(item,i){ %>
+				<tr>
+					<td><%- i+1 %></td>
+					<td><a href="/bookabout?newbname=<%- item.newbname %>"><%- item.newbname %></a></td>
+					<td><%- item.newbwriter %></td>
+					<td><%- item.newbpress %></td>
+					<td><%- item.newbaddnum %></td>
+					<td>
+						<button type="button" class="btn btn-primary" data-id="<%- item._id %>" id="bookbor">申请借阅</button>
+					</td>
+				</tr>
+			<% }) %>
+		</tbody>
+	</table>
+	
+	<!--分页-->
+	  <ul class="pagination">
+	    <li>
+	      <a href="/stubor?page=<%- page<=1?1:parseInt(page)-1 %>" aria-label="Previous">
+	        <span aria-hidden="true">上一页</span>
+	      </a>
+	    </li>
+	    <% if(allPages>4){ %>
+	    		<li><a href="/stubor?page=1">1</a></li>
+			    <li><a href="/stubor?page=2">2</a></li>
+			    <li><a href="#">...</a></li>
+			    <li><a href="/stubor?page=<%- allPages-1 %>"><%- allPages-1 %></a></li>
+			    <li><a href="/stubor?page=<%- allPages %>"><%- allPages %></a></li>  	
+	    <% }else{ %>
+	    	<% for(let i=0;i<allPages;i++){ %>
+	    		<li><a href="/stubor?page=<%- i+1 %>"><%- i+1 %></a></li>
+	    	<% } %> 
+	    <% } %>	    
+	    <li>
+	      <a href="/stubor?page=<%- page>=allPages?allPages:parseInt(page)+1 %>" aria-label="Next">
+	        <span aria-hidden="true">下一页</span>
+	      </a>
+	    </li>
+	  </ul>
+	  
+	  
+	  <script type="text/javascript">
+	  	$(function(){
+	  		//申请借阅图书操作
+	  		$("tbody #bookbor").click(function(){
+	  			var url = location.search;
+	  			var page = "";
+	  			if(url.indexOf("?"!=-1)){
+	  				page = url.substr(url.indexOf("?")+1);
+	  			}
+	  			//console.log(page);
+	  			$.ajax({
+	  				type:"post",
+	  				url:"/users/bookbor",
+	  				data:{b_id:$(this).data("id")},
+	  				success:function(data){
+	  					data = JSON.parse(data);
+	  					//console.log(data);
+	  					if(data.code==1){
+	  						alert("申请成功，请尽快借阅");
+	  						location.href = "/stubor?"+page;
+	  					}
+	  				}
+	  			});
+	  		})
+	  	})
+	  </script>
+</body>
+</html>
