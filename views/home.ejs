@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图书管理系统</title>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.css"/>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/home.css"/>
+		<script src="/javascripts/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/moment-with-locales.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/bootstrap-datetimepicker.js" type="text/javascript" charset="utf-8"></script>	
+		<script src="/javascripts/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>		
+		<script src="/javascripts/xheditor/xheditor-1.2.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/javascripts/xheditor/xheditor_lang/zh-cn.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-default">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" style="color:#009788;font-weight: 600;font-size: 28px;text-indent: 2px;">图书管理系统</a>
+			    </div>
+			      <ul class="nav navbar-nav">
+			        <li><a href="/bookdetail">图书管理</a></li>
+			        <li><a href="#">人员信息管理</a></li>
+			        <li><a href="#">Link</a></li>
+			        <li><a href="#">Link</a></li>
+			        <li><a href="#">Link</a></li>
+			        <li><a href="#">Link</a></li>
+			      </ul>
+			      <div class="navbar-form navbar-left">
+			        <div class="form-group">
+			          <input type="text" class="form-control" id="home_findbook" placeholder="请输入需要查询的图书">
+			        </div>
+			        <button type="submit" class="btn btn-default" id="home_findbook_btn">搜索</button>
+			      </div>
+			      <ul class="nav navbar-nav navbar-right">
+			      	 <li class="userhead"><a><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;当前用户：<%- username %></a></li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">用户管理<span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			            <li><a href="/">注销</a></li>
+			            <li><a href="#">个人信息</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			  </div>
+			</nav>
+		</header>
+		<section>
+			<aside style="width: 200px;">
+				<ul class="list-group">
+					<li class="list-group-item" onclick="location.href='/home'"><b style="background:#009788;">系统首页<span class="glyphicon glyphicon-menu-right"></span></b></li>
+					  <li class="list-group-item bookadmin_w">
+						  	<b>图书管理<span class="glyphicon glyphicon-menu-down"></span></b>
+						  	<ul class="list-group bookadmin">
+								  <li class="list-group-item" id="bookdetail" onclick="location.href='/bookdetail'">图书详情<span class="glyphicon glyphicon-menu-right"></span></li>
+								  <li class="list-group-item" id="newbook" onclick="location.href='/newbook'">新书上架<span class="glyphicon glyphicon-menu-right"></span></li>
+							 </ul>
+					  </li>
+					  <li class="list-group-item">
+						  	<b>人员信息管理<span class="glyphicon glyphicon-menu-down"></span></b>
+						  	<ul class="list-group">
+								  <li class="list-group-item">信息查询</li>
+								  <li class="list-group-item">信息上传</li>
+							 </ul>
+					  </li>
+				</ul>
+			</aside>
+			<artical>
+				<%- include(infoUrl) %>
+			</artical>
+		</section>
+		<footer>田博设计  &copy;2018-10-12 版权所有，翻版必究</footer>
+		<script src="/javascripts/fwb.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("aside ul b").click(function(){
+					$(this).siblings("ul").slideToggle().parents("li").siblings("li").children("ul").slideUp();
+				})
+				
+				//顶部书名模糊查询
+				$("#home_findbook_btn").click(function(){
+					$.ajax({
+						type:"get",
+						url:"/users/findbook2",
+						data:{newbname:$("#home_findbook").val()},
+						success:function(data){
+							data = JSON.parse(data);
+							if(data.code == 1) {
+								location.href = "/findbook2?bname=" + $("#home_findbook").val();
+							} else {
+								alert("未找到相应信息");
+							}
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

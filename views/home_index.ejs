@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>首页</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.0/css/swiper.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.0/js/swiper.min.js"></script>
+	<style type="text/css">
+		.breadcrumb{
+			margin-bottom: 0;
+			background: none;
+		}
+		h1{
+			float: left;
+			margin:200px 340px;
+			font-size: 45px;
+			font-weight: 700;
+			color: red;
+		}
+		.swiper-container{
+			width:85.3%;
+			height:85%;
+			position:absolute;
+			z-index: -100;
+		}
+		.swiper-container .swiper-wrapper{
+			width: 100%;	
+		}
+		.swiper-container .swiper-wrapper .swiper-slide{
+			width: 100%;
+			overflow: hidden;
+		}
+		.swiper-container .swiper-wrapper .swiper-slide img{
+			width:1165px;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<ol class="breadcrumb">
+	  <li><a>图书管理</a></li>
+	</ol>
+	<h1>欢迎使用图书管理系统</h1>
+	<div class="swiper-container">
+	    <div class="swiper-wrapper">
+	        <div class="swiper-slide">
+	        	<img src="/images/home_bg1.jpg" alt="图书" />
+	        </div>
+	        <div class="swiper-slide">
+	        	<img src="/images/home_bg2.jpg" alt="图书" />
+	        	
+	        </div>
+	        <div class="swiper-slide">
+	        	<img src="/images/home_bg2.jpg" alt="图书" />
+	        </div>
+	    </div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			var mySwiper = new Swiper('.swiper-container',{
+				autoplay: true,
+				autoplay: {
+				    delay: 5000,//1秒切换一次
+				},
+				effect : 'fade',
+			})
+		})
+	</script>
+</body>
+</html>

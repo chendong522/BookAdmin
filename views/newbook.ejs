@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>新书上架</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		h3{
+			text-align: center;
+			font-size:30px;
+			color: red;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<!--新书上架页面-->
+	<!--路径导航-->
+	<ol class="breadcrumb">
+	  <li><a href="/bookdetail">图书管理</a></li>
+	  <li><a href="/newbook">新书上架</a></li>
+	</ol>
+	<!--新书信息-->
+	<h3>新书上架</h3>
+	<div class="form-horizontal">
+	  <div class="form-group">
+	    <label for="newbid" class="col-sm-2 control-label">新书编号：</label>
+	    <div class="col-sm-3">
+	      <input type="text" class="form-control" id="newbid" placeholder="编号">
+	    </div>
+	    <label for="newbkind" class="col-sm-2 control-label">书目类别：</label>
+	    <div class="col-sm-3">
+	    <select class="form-control" id="newbkind">
+		  <option>文学类</option>
+		  <option>科幻类</option>
+		  <option>艺术类</option>
+		  <option>学习辅助类</option>
+		  <option>报刊杂志</option>
+		</select>
+		</div>
+	  </div>
+	  <div class="form-group">
+	    <label for="newbname" class="col-sm-2 control-label">新书名称：</label>
+	    <div class="col-sm-3">
+	      <input type="text" class="form-control" id="newbname" placeholder="名称">
+	    </div>
+	     <label for="newbwriter" class="col-sm-2 control-label">图书作者：</label>
+	    <div class="col-sm-3">
+	      <input type="text" class="form-control" id="newbwriter" placeholder="作者">
+	    </div>
+	  </div>
+	   <div class="form-group">
+	    <label for="newbdate" class="col-sm-2 control-label">出版时间：</label>
+	    <div class="col-sm-3">
+	    	<!--日期选择-->
+	        <div class='col-sm-12'>
+	            <div class="form-group">
+	                <div class='input-group date'>
+	                    <input type='text' class="form-control newbdate"  id='datetimepicker1' />
+	                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+	                    </span>
+	                </div>
+	            </div>
+	        </div>
+	      <!--<input type="text" class="form-control" id="newbdate" placeholder="出版时间">-->
+	    </div>
+	    <label for="newbpress" class="col-sm-2 control-label">出版社：</label>
+	    <div class="col-sm-3">
+	      <input type="text" class="form-control" id="newbpress" placeholder="出版社">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="newbinum" class="col-sm-2 control-label">国际标准刊号：</label>
+	    <div class="col-sm-4">
+	      <input type="text" class="form-control" id="newbinum" placeholder="国际标准刊号">
+	    </div>
+	     <label for="newbaddnum" class="col-sm-2 control-label" style="margin-left:-14px;">添加数量：</label>
+		   <div class="input-group col-sm-2">
+		      <input type="text" class="form-control" id="newbaddnum" placeholder="添加数量">
+		      <div class="input-group-addon">册</div>
+		   </div>
+	  </div>
+	  <div class="form-group">
+	  <label class="col-sm-2 control-label">备注信息：</label>
+	    <div class="col-sm-8">
+	      <textarea class="form-control xheditor newbother" id="con" rows="6"></textarea>
+    	</div>
+    	</div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-3">
+	      <button type="button" class="btn btn-success" id="sureadd">确定添加</button>
+	      <button type="button" class="btn btn-danger" onclick="location.href='/bookdetail'">返回</button>
+	    </div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+		$(function(){	
+			$('#datetimepicker1').datetimepicker({ viewMode: 'years', format: 'YYYY'});
+			//图书添加操作
+			$("#sureadd").click(function(){
+				$.ajax({
+					type:"post",
+					url:"/users/newbook",
+					data:{newbid:$("#newbid").val(),newbkind:$("#newbkind").val(),newbname:$("#newbname").val(),newbwriter:$("#newbwriter").val(),newbdate:$(".newbdate").val(),newbpress:$("#newbpress").val(),newbinum:$("#newbinum").val(),newbaddnum:$("#newbaddnum").val(),newbother:$(".newbother").val()},
+					success:function(data){
+						data = JSON.parse(data);
+						console.log(data);
+						if(data.code==1){
+							alert("添加成功！");
+							location.href = "/newbook";
+						}else{
+							alert("添加失败，请重试！");
+							location.href = "/newbook";
+						}
+					}
+				});
+			})
+		})
+	</script>
+</body>
+</html>

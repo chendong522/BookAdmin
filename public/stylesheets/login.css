@@ -1,0 +1,35 @@
+body{
+	background: url(../images/loginbg.png)no-repeat;
+	background-size: cover;
+}
+.login_bg{
+	width: 500px;
+	height: 400px;
+	margin: 125px auto;
+	background: url(../images/logins.png)no-repeat 0 -50px;
+	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.login_bg h2{
+	margin-bottom: 40px;
+}
+.login_bg .form-group{
+	width: 300px;
+	display: flex;
+	align-items: center;
+}
+.login_bg .form-group label{
+	width: 70px;
+	text-align: right;
+	margin-right: 20px;
+}
+.login_bg .btn{
+	display: flex;
+	align-items: flex-end;
+}
+.login_bg .btn button{
+	margin: 0 20px;
+}

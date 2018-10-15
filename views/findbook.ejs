@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>图书详情</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		.form-inline .form-group,.form-inline .form-control{
+			margin-left: 50px;
+		}
+		.table{
+			width: 1000px;
+			margin: 30px auto;
+		}
+		.table th,.table td{
+			text-align: center;
+		}
+		.pagination{
+			margin-left: 80px;
+		}
+	</style>
+</head>
+<body>
+	<!--图书详情-->
+	<ol class="breadcrumb">
+	  <li><a href="/bookdetail">图书管理</a></li>
+	  <li><a href="/bookdetail">图书列表</a></li>
+	</ol>
+	
+	<!--图书列表查询-->
+	<div class="form-inline">
+	  <div class="form-group">
+	    <label class="sr-only" for="exampleInputEmail3">图书编号查询</label>
+	    <input type="text" class="form-control" id="bidfind" placeholder="请输入图书编号">
+	  </div>
+	  <button type="button" class="btn btn-primary" id="bidfind_btn">编号查询</button>
+	   <div class="form-group">
+	    <label class="sr-only" for="exampleInputEmail3">图书名称查找</label>
+	    <input type="text" class="form-control" id="bnamefind" placeholder="请输入书名">
+	  </div>
+	  <button type="button" class="btn btn-success" id="bnamefind_btn">书名查询</button>
+	    <select class="form-control" id="bkindfind">
+		  <option>文学类</option>
+		  <option>科幻类</option>
+		  <option>艺术类</option>
+		  <option>学习辅助类</option>
+		  <option>报刊杂志</option>
+		</select>
+	  <button type="button" class="btn btn-danger" id="bkindfind_btn">类别查询</button>
+	</div>
+	
+	
+	
+	<!--图书列表展示-->
+	<table class="table">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>书名</th>
+				<th>作者</th>
+				<th>出版社</th>
+				<th>库存</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% info.map(function(item,i){ %>
+				<tr>
+					<td><%- i+1 %></td>
+					<td><%- item.newbname %></td>
+					<td><%- item.newbwriter %></td>
+					<td><%- item.newbpress %></td>
+					<td><%- item.newbaddnum %></td>
+					<td>
+						<button type="button" class="btn btn-success" data-id="<%- item._id %>" id="upbtn" data-toggle="modal" data-target="#myModal">修改</button>
+						<button type="button" class="btn btn-danger" data-id="<%- item._id %>" id="rmbtn">删除</button>
+					</td>
+				</tr>
+			<% }) %>
+		</tbody>
+		
+		<!--模态框弹出层-->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">信息修改</h4>
+		      </div>
+		      <div class="modal-body">
+		        <div class="form-horizontal">
+				  <div class="form-group">
+				    <label for="newbid" class="col-sm-2 control-label">新书编号：</label>
+				    <div class="col-sm-4">
+				      <input type="text" class="form-control" id="newbid" placeholder="编号" disabled>
+				    </div>
+				    <label for="newbkind" class="col-sm-2 control-label">书目类别：</label>
+				    <div class="col-sm-3">
+				    <select class="form-control" id="newbkind">
+					  <option>文学类</option>
+					  <option>科幻类</option>
+					  <option>艺术类</option>
+					  <option>学习辅助类</option>
+					  <option>报刊杂志</option>
+					</select>
+					</div>
+				  </div>
+				  <div class="form-group">
+				    <label for="newbname" class="col-sm-2 control-label">新书名称：</label>
+				    <div class="col-sm-4">
+				      <input type="text" class="form-control" id="newbname" placeholder="名称">
+				    </div>
+				     <label for="newbwriter" class="col-sm-2 control-label">图书作者：</label>
+				    <div class="col-sm-3">
+				      <input type="text" class="form-control" id="newbwriter" placeholder="作者">
+				    </div>
+				  </div>
+				   <div class="form-group">
+				    <label for="newbdate" class="col-sm-2 control-label">出版时间：</label>
+				    <div class="col-sm-4">
+				    	<!--日期选择-->
+			              <div class='col-sm-12'>
+					            <div class="form-group">
+					                <div class='input-group date'>
+					                    <input type='text' class="form-control newbdate"  id='datetimepicker1'/>
+					                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+					                    </span>
+					                </div>
+					            </div>
+					        </div>
+				        <script type="text/javascript">
+				            $(function () {
+				                $('#datetimepicker1').datetimepicker({ viewMode: 'years', format: 'YYYY'});
+				            });
+				        </script>
+				      <!--<input type="text" class="form-control" id="newbdate" placeholder="出版时间">-->
+				    </div>
+				    <label for="newbpress" class="col-sm-2 control-label">出版社：</label>
+				    <div class="col-sm-3">
+				      <input type="text" class="form-control" id="newbpress" placeholder="出版社">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="newbinum" class="col-sm-2 control-label">国际标准刊号：</label>
+				    <div class="col-sm-4">
+				      <input type="text" class="form-control" id="newbinum" placeholder="国际标准刊号">
+				    </div>
+				     <label for="newbaddnum" class="col-sm-2 control-label" style="margin-left:-14px;">添加数量：</label>
+					   <div class="input-group col-sm-3">
+					      <input type="text" class="form-control" id="newbaddnum" placeholder="添加数量">
+					      <div class="input-group-addon">册</div>
+					   </div>
+				  </div>
+				  <div class="form-group">
+				  <label class="col-sm-2 control-label">备注信息：</label>
+				    <div class="col-sm-9">
+				      <textarea class="form-control xheditor newbother" id="con" rows="6"></textarea>
+			    	</div>
+			    </div>
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+		        <button type="button" class="btn btn-primary" id="sureup">确认修改</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</table>
+	
+	
+	<!--分页-->
+	  <ul class="pagination">
+	    <li>
+	      <a href="/bookdetail?page=<%- page<=1?1:parseInt(page)-1 %>" aria-label="Previous">
+	        <span aria-hidden="true">上一页</span>
+	      </a>
+	    </li>
+	    <% if(allPages>4){ %>
+	    		<li><a href="/bookdetail?page=1">1</a></li>
+			    <li><a href="/bookdetail?page=2">2</a></li>
+			    <li><a href="#">...</a></li>
+			    <li><a href="/bookdetail?page=<%- allPages-1 %>"><%- allPages-1 %></a></li>
+			    <li><a href="/bookdetail?page=<%- allPages %>"><%- allPages %></a></li>  	
+	    <% }else{ %>
+	    	<% for(let i=0;i<allPages;i++){ %>
+	    		<li><a href="/bookdetail?page=<%- i+1 %>"><%- i+1 %></a></li>
+	    	<% } %> 
+	    <% } %>	    
+	    <li>
+	      <a href="/bookdetail?page=<%- page>=allPages?allPages:parseInt(page)+1 %>" aria-label="Next">
+	        <span aria-hidden="true">下一页</span>
+	      </a>
+	    </li>
+	  </ul>
+	 <script src="/javascripts/bookzsgc.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

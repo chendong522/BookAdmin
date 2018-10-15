@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>图书管理系统注册</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/register.css"/>
+    <script src="/javascripts/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    	<div class="login_bg">
+    		<h2>欢迎注册图书管理系统</h2>
+    		<div class="form-group">
+			    <label for="inputEmail3" class="control-label">用户名</label>
+		      <input type="text" class="form-control" id="username" placeholder="用户名">
+			  </div>
+			  <div class="form-group">
+			    <label for="inputPassword3" class="control-label">密码</label>
+		      <input type="password" class="form-control" id="password" placeholder="密码">
+			  </div>
+			  <div class="form-group">
+			    <label for="inputPassword3" class="control-label">手机号</label>
+		      <input type="text" class="form-control" id="tel" placeholder="手机号">
+			  </div>
+			  <div class="form-group btn">
+			      <button class="btn btn-success" id="register">注册</button>
+			      <button class="btn btn-success" id="out">返回</button>
+			  </div>
+    	</div>
+    	<script type="text/javascript">
+    		$(function(){
+    			$("#register").click(function(){
+    				$.ajax({
+    					type:"post",
+    					url:"/users/register",
+    					data:{username:$("#username").val(),password:$("#password").val(),tel:$("#tel").val()},
+    					success:function(data){
+    						data = JSON.parse(data);
+    						//console.log(data);
+    						if(data.code==1){
+    							alert("注册成功，欢迎加入！")
+    							location.href = "/";
+    						}else{
+    							alert("该用户名已被注册，请重新输入！");
+    							location.href = "/register";
+    						}
+    					}
+    				});
+    			})
+    			$("#out").click(function(){
+    				location.href = "/";
+    			})
+    		})
+    	</script>
+  </body>
+</html>
