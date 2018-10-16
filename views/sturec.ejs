@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>图书推荐</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		h3{
+			text-align: center;
+			font-size:30px;
+			color: red;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<!--图书推荐-->
+	<!--路径导航-->
+	<ol class="breadcrumb">
+	  <li><a href="/stubor">图书借阅</a></li>
+	  <li><a href="/sturec">图书推荐</a></li>
+	</ol>
+	
+	<h3>图书推荐</h3>
+	<div class="form-horizontal">
+		<div class="form-group">
+		    <label for="brecname" class="col-sm-2 control-label">推荐书名：</label>
+		    <div class="col-sm-4">
+		      <input type="email" class="form-control" id="brecname" placeholder="推荐书名">
+		    </div>
+		     <label for="brecuser" class="col-sm-2 control-label">推荐人：</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" id="brecuser"><%- username %></p>
+		    </div>
+		</div>
+	  <div class="form-group">
+	    <label for="brecwriter" class="col-sm-2 control-label">推荐书目作者：</label>
+	    <div class="col-sm-4">
+	      <input type="email" class="form-control" id="brecwriter" placeholder="推荐书目作者">
+	    </div>
+	    <label for="brecpress" class="col-sm-2 control-label">书目出版社：</label>
+	    <div class="col-sm-3">
+	      <input type="email" class="form-control" id="brecpress" placeholder="推荐书目出版社">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="brecrea" class="col-sm-2 control-label">推荐理由：</label>
+	    <div class="col-sm-9">
+	      <textarea class="form-control xheditor brecrea" id="con" rows="6"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-success" id="sturec_btn">确认</button>
+	    </div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			$("#sturec_btn").click(function(){
+				$.ajax({
+					type:"post",
+					url:"/users/sturec",
+					data:{brecname:$("#brecname").val(),brecuser:$("#brecuser").html(),brecwriter:$("#brecwriter").val(),brecpress:$("#brecpress").val(),brecrea:$("#brecrea").val()},
+					success:function(data){
+						data = JSON.parse(data);
+						if(data.code==1){
+							alert("推荐已提交，谢谢您的推荐！");
+						}else{
+							alert("出错了，请重试！");
+						}
+					}
+				});
+			})
+		})
+	</script>
+</body>
+</html>

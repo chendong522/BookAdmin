@@ -108,7 +108,16 @@ router.post("/rePass", (req, res) => {
 router.post("/newbook", (req, res) => {
 	mongodb.connect(db_str, (err, database) => {
 		database.collection("book", (err, coll) => {
-			coll.save(req.body, () => {
+			coll.save({
+					newbid: Number(req.body.newbid),
+					newbkind: req.body.newbkind,
+					newbname: req.body.newbname,
+					newbwriter: req.body.newbwriter,
+					newbdate: Number(req.body.newbdate),
+					newbpress: req.body.newbpress,
+					newbinum: req.body.newbinum,
+					newbaddnum: Number(req.body.newbaddnum),
+					newbother: req.body.newbother}, () => {
 				res.send(JSON.stringify({
 					code: 1,
 					msg: "插入成功！"
@@ -247,14 +256,14 @@ router.post("/upbook2", (req, res) => {
 				_id: id
 			}, {
 				$set: {
-					newbid: req.body.newbid,
+					newbid: Number(req.body.newbid),
 					newbkind: req.body.newbkind,
 					newbname: req.body.newbname,
 					newbwriter: req.body.newbwriter,
-					newbdate: req.body.newbdate,
+					newbdate: Number(req.body.newbdate),
 					newbpress: req.body.newbpress,
 					newbinum: req.body.newbinum,
-					newbaddnum: req.body.newbaddnum,
+					newbaddnum: Number(req.body.newbaddnum),
 					newbother: req.body.newbother
 				}
 			}, () => {
@@ -338,23 +347,77 @@ router.post("/stuinfo_up2", (req, res) => {
 	})
 })
 
+
+//学生点击列表链接查看图书备注信息
+router.get("/booklook",(req,res)=>{
+	var _id = ObjectId(req.query._id);
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("book",(err,coll)=>{
+			coll.find({_id:_id}).toArray((err,data)=>{
+				res.send(data[0]);
+				database.close();
+			})
+		})
+	})
+})
+
+//书名查找借阅
+router.get("/bnameborfind",(req,res)=>{
+	var bname = querystring.unescape(req.query.bname);
+	var reg = new RegExp("^"+bname);
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("book",(err,coll)=>{
+			coll.find({newbname:reg}).toArray((err,data)=>{
+				if(data.length>0){
+					res.send(JSON.stringify({code:1,msg:"查询成功"}));
+				}else{
+					res.send(JSON.stringify({code:0,msg:"查询失败"}));
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+//书类别查找借阅
+router.get("/bkindborfind",(req,res)=>{
+	var bkind = req.query.bkind;
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("book",(err,coll)=>{
+			coll.find({newbkind:bkind}).toArray((err,data)=>{
+				if(data.length>0){
+					res.send(JSON.stringify({code:1,msg:"查询成功"}));
+				}else{
+					res.send(JSON.stringify({code:0,msg:"查询失败"}));
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+
+
+
 //图书借阅操作
 router.post("/bookbor", (req, res) => {
 	//借阅书的_id值
 	var b_id = ObjectId(req.body.b_id);
-	console.log(b_id);
-	//连接数据库   1.图书表中指定书数量-1   2.图书借阅表中插入新数据
-	async.series([
+	//console.log(b_id);
+	//连接数据库   1.图书表中指定书数量-1，获取书名       2.图书借阅表中插入新数据{系统名，用户姓名，书名}
+	//并行无关联执行
+	async.parallel([
 		(callback)=>{
 			mongodb.connect(db_str,(err,database)=>{
 				database.collection("book",(err,coll)=>{
 					//指定书数量-1
 					coll.update({_id:b_id},{$inc:{newbaddnum:-1}},()=>{
-						//获取书名
-						coll.find({_id:b_id}).toArray((err,data)=>{
-							callback(null,data[0].newbname);
-						})	
-					})									
+					})
+					//获取书名
+					coll.find({_id:b_id}).toArray((err,data)=>{
+						callback(null,data[0].newbname);
+						database.close();
+					})															
 				})
 			})
 		},(callback)=>{
@@ -363,21 +426,70 @@ router.post("/bookbor", (req, res) => {
 					//获取登录用户姓名
 					coll.find({stuadname:req.session.username}).toArray((err,data)=>{
 						callback(null,data[0].stuname);
+						database.close();
 					})
 				})
 			})
 		}
 	],(err,data)=>{
-		console.log(data);
+		//console.log(data);
 		//data:[书名,用户名]
 		mongodb.connect(db_str,(err,database)=>{
 			database.collection("bookbor",(err,coll)=>{
-				coll.save({stuname:data[1],book:data[0]},()=>{
-					res.send(JSON.stringify({code:1}));
+				//stuadname用于借阅时判断是否借阅数量达到上限
+				coll.save({stuadname:req.session.username,stuname:data[1],book:data[0],state:0},()=>{
+					res.send(JSON.stringify({code:1,msg:"申请借阅成功"}));
+					database.close();
 				});
 			})
 		})
 		
+	})
+})
+
+//图书推荐
+router.post("/sturec",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("bookrec",(err,coll)=>{
+			coll.save(req.body,()=>{
+				res.send(JSON.stringify({code:1,msg:"推荐成功"}));
+				database.close();
+			})
+		})
+	})
+})
+
+
+
+//管理员图书审核     改变bookbor集合中的state状态信息
+router.post("/auditout1",(req,res)=>{
+	var _id = ObjectId(req.body._id);
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("bookbor",(err,coll)=>{
+			coll.update({_id:_id},{$set:{state:1}},()=>{
+				res.send(JSON.stringify({code:1,msg:"已审核"}));
+				database.close();
+			})
+		})
+	})
+})
+
+//管理员图书借阅信息归还删除      删除借阅集合中的信息，图书集合中指定图书数量+1
+router.post("/revertdelete1",(req,res)=>{
+	var _id = ObjectId(req.body._id);
+	var bname = req.body.bname;
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("bookbor",(err,coll)=>{
+			coll.remove({_id:_id},()=>{
+				database.close();
+			})
+		})
+		database.collection("book",(err,coll)=>{
+			coll.update({newbname:bname},{$inc:{newbaddnum:1}},()=>{
+				res.send(JSON.stringify({code:1,msg:"删除成功"}));
+				database.close();
+			})
+		})
 	})
 })
 

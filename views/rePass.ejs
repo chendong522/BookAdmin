@@ -36,7 +36,7 @@
     					data:{username:$("#username").val(),password:$("#password").val(),tel:$("#tel").val()},
     					success:function(data){
     						data = JSON.parse(data);
-    						console.log(data);
+    						//console.log(data);
     						if(data.code==1){
     							alert("密码重置成功，即将跳转！")
     							location.href = "/home";

@@ -106,7 +106,7 @@
 					data:{newbid:$("#newbid").val(),newbkind:$("#newbkind").val(),newbname:$("#newbname").val(),newbwriter:$("#newbwriter").val(),newbdate:$(".newbdate").val(),newbpress:$("#newbpress").val(),newbinum:$("#newbinum").val(),newbaddnum:$("#newbaddnum").val(),newbother:$(".newbother").val()},
 					success:function(data){
 						data = JSON.parse(data);
-						console.log(data);
+						//console.log(data);
 						if(data.code==1){
 							alert("添加成功！");
 							location.href = "/newbook";

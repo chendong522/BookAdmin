@@ -30,6 +30,22 @@
 	  <li><a href="/stubor">图书查询</a></li>
 	</ol>
 	
+	<!--图书列表查询-->
+	<div class="form-inline">
+	   <div class="form-group">
+	    <input type="text" class="form-control" id="bnameborfind" placeholder="请输入书名">
+	  </div>
+	  <button type="button" class="btn btn-success" id="bnameborfind_btn">书名查询</button>
+	    <select class="form-control" id="bkindborfind">
+		  <option>文学类</option>
+		  <option>科幻类</option>
+		  <option>艺术类</option>
+		  <option>学习辅助类</option>
+		  <option>报刊杂志</option>
+		</select>
+	  <button type="button" class="btn btn-danger" id="bkindborfind_btn">类别查询</button>
+	</div>
+	
 	<!--图书列表展示-->
 	<table class="table">
 		<thead>
@@ -46,16 +62,38 @@
 			<% info.map(function(item,i){ %>
 				<tr>
 					<td><%- i+1 %></td>
-					<td><a href="/bookabout?newbname=<%- item.newbname %>"><%- item.newbname %></a></td>
+					<td><a data-toggle="modal" data-target="#myModal" data-look='<%- item._id %>'"><%- item.newbname %></a></td>
 					<td><%- item.newbwriter %></td>
 					<td><%- item.newbpress %></td>
 					<td><%- item.newbaddnum %></td>
 					<td>
-						<button type="button" class="btn btn-primary" data-id="<%- item._id %>" id="bookbor">申请借阅</button>
+						<% if(item.newbaddnum<=0){ %>
+							
+						<% }else{ %>
+							<button type="button" class="btn btn-primary" data-id="<%- item._id %>" id="bookbor">申请借阅</button>
+						<% } %>
 					</td>
 				</tr>
 			<% }) %>
 		</tbody>
+		<!--模态框-->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel"><!--书名--></h4>
+		      </div>
+		      <div class="modal-body">
+		        	<!--详情内容-->
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
 	</table>
 	
 	<!--分页-->
@@ -82,33 +120,6 @@
 	      </a>
 	    </li>
 	  </ul>
-	  
-	  
-	  <script type="text/javascript">
-	  	$(function(){
-	  		//申请借阅图书操作
-	  		$("tbody #bookbor").click(function(){
-	  			var url = location.search;
-	  			var page = "";
-	  			if(url.indexOf("?"!=-1)){
-	  				page = url.substr(url.indexOf("?")+1);
-	  			}
-	  			//console.log(page);
-	  			$.ajax({
-	  				type:"post",
-	  				url:"/users/bookbor",
-	  				data:{b_id:$(this).data("id")},
-	  				success:function(data){
-	  					data = JSON.parse(data);
-	  					//console.log(data);
-	  					if(data.code==1){
-	  						alert("申请成功，请尽快借阅");
-	  						location.href = "/stubor?"+page;
-	  					}
-	  				}
-	  			});
-	  		})
-	  	})
-	  </script>
+	  <script src="/javascripts/bookborc.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

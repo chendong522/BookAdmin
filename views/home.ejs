@@ -25,8 +25,8 @@
 			    	<ul class="nav navbar-nav">
 			    		<li><a href="/home">系统首页</a></li>
 				        <li><a href="/bookdetail">图书管理</a></li>
-				        <!--<li><a href="#">人员信息管理</a></li>
-				        <li><a href="#">Link</a></li>
+				        <li><a href="/borfind">借阅管理</a></li>
+				        <!--<li><a href="#">Link</a></li>
 				        <li><a href="#">Link</a></li>
 				        <li><a href="#">Link</a></li>-->
 				      </ul>
@@ -74,9 +74,9 @@
 								 </ul>
 						  </li>
 						  <li class="list-group-item">
-							  	<b>图书借阅<span class="glyphicon glyphicon-menu-down"></span></b>
+							  	<b>借阅管理<span class="glyphicon glyphicon-menu-down"></span></b>
 							  	<ul class="list-group">
-									  <li class="list-group-item" onclick="location.href='charts'">图表展示<span class="glyphicon glyphicon-menu-right"></span></li>
+									  <li class="list-group-item" onclick="location.href='borfind'">借阅查看<span class="glyphicon glyphicon-menu-right"></span></li>
 									  <li class="list-group-item">信息上传<span class="glyphicon glyphicon-menu-right"></span></li>
 								 </ul>
 						  </li>
@@ -96,7 +96,7 @@
 								  	<b>图书借阅<span class="glyphicon glyphicon-menu-down"></span></b>
 								  	<ul class="list-group">
 										  <li class="list-group-item" onclick="location.href='stubor'">图书查询<span class="glyphicon glyphicon-menu-right"></span></li>
-										  <li class="list-group-item">图书推荐<span class="glyphicon glyphicon-menu-right"></span></li>
+										  <li class="list-group-item" onclick="location.href='sturec'">图书推荐<span class="glyphicon glyphicon-menu-right"></span></li>
 									 </ul>
 							  </li>
 						</ul>
@@ -114,7 +114,7 @@
 					$(this).siblings("ul").slideToggle().parents("li").siblings("li").children("ul").slideUp();
 				})
 				
-				//顶部书名模糊查询
+				//管理员顶部书名模糊查询
 				$("#home_findbook_btn").click(function(){
 					$.ajax({
 						type:"get",
@@ -130,6 +130,7 @@
 						}
 					});
 				})
+				
 			})
 		</script>
 	</body>

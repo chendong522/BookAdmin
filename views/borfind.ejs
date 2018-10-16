@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>图书借阅</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		.form-inline .form-group,.form-inline .form-control{
+			margin-left: 50px;
+		}
+		.table{
+			width: 1000px;
+			margin: 30px 60px;
+		}
+		.table tr th,.table tr td{
+			width: 150px;
+			text-align: center;
+		}
+		.pagination{
+			margin-left: 80px;
+		}
+	</style>
+</head>
+<body>
+	<!--图书借阅导航-->
+	<ol class="breadcrumb">
+	  <li><a href="/borfind">借阅管理</a></li>
+	  <li><a href="/borfind">借阅查看</a></li>
+	</ol>
+	
+	<div class="form-inline">
+		<div class="form-group">
+		    <label class="sr-only" for="boruserfind">学生姓名查询</label>
+		    <input type="text" class="form-control" id="boruserfind" placeholder="请输入学生姓名">
+		  </div>
+	  	<button type="button" class="btn btn-primary" id="boruserfind_btn">借阅查询</button>
+  		<button class="btn btn-success">添加借阅</button>
+	</div>
+	<!--借阅信息列表-->
+	<table class="table">
+		<thead>
+			<tr>
+				<th>姓名</th>
+				<th>申请借阅</th>
+				<th>借阅状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% info.map(function(item){ %>
+			<tr>
+				<td><%- item.stuname %></td>
+				<td><%- item.book %></td>
+				<% if(item.state==0){ %>
+				<td style="color: red;">未审核</td>
+				<% }else{ %>
+				<td style="color: green;">已审核</td>
+				<% } %>
+				<td>
+					<button class="btn btn-primary" _id="<%- item._id %>" id="auditout_btn">审核通过</button>
+					<button class="btn btn-danger" _id="<%- item._id %>" bname="<%- item.book %>" id="revertdelete_btn">归还删除</button>
+				</td>				
+			</tr>
+			<% }) %>
+		</tbody>
+	</table>
+	
+	<!--分页-->
+	<ul class="pagination">
+	    <li>
+	      <a href="/borfind?page=<%- page<=1?1:parseInt(page)-1 %>" aria-label="Previous">
+	        <span aria-hidden="true">上一页</span>
+	      </a>
+	    </li>
+	    <% if(allPages>4){ %>
+	    		<li><a href="/borfind?page=1">1</a></li>
+			    <li><a href="/borfind?page=2">2</a></li>
+			    <li><a href="#">...</a></li>
+			    <li><a href="/borfind?page=<%- allPages-1 %>"><%- allPages-1 %></a></li>
+			    <li><a href="/borfind?page=<%- allPages %>"><%- allPages %></a></li>  	
+	    <% }else{ %>
+	    	<% for(let i=0;i<allPages;i++){ %>
+	    		<li><a href="/borfind?page=<%- i+1 %>"><%- i+1 %></a></li>
+	    	<% } %> 
+	    <% } %>	    
+	    <li>
+	      <a href="/borfind?page=<%- page>=allPages?allPages:parseInt(page)+1 %>" aria-label="Next">
+	        <span aria-hidden="true">下一页</span>
+	      </a>
+	    </li>
+	  </ul>
+  <script src="/javascripts/boradmin.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
