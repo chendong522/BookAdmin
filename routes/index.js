@@ -254,7 +254,7 @@ router.get("/stuinfo_add",(req,res)=>{
 				if(data.length>0){
 					res.render("home",{username:req.session.username,infoUrl:"stuinfo_add",data:data[0]});
 				}else{
-					res.render("home",{username:req.session.username,infoUrl:"stuinfo_add",data:""});
+					res.render("home",{username:req.session.username,infoUrl:"stuinfo_add",data:[]});
 				}
 				database.close();
 			})
@@ -514,6 +514,168 @@ router.get("/borfind",(req,res)=>{
 					page: page,
 					allPages: allPages
 				});
+				database.close();
+			})
+		})
+	})
+})
+
+//通过查询渲染图书借阅管理界面
+router.get("/borfind1",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("bookbor",(err,coll)=>{
+			//数据总条数
+			var count = 0;
+			//总页数
+			var allPages = 0;
+			//每页条数
+			var size = 5;
+			//页码
+			var page = req.query.page;
+			page = page ? page : 1;
+
+			//异步加载流程
+			async.series([
+				(callback) => {
+					coll.find({stuname:req.query.stuname}).sort({
+						_id: -1
+					}).toArray((err, data) => {
+						count = data.length; //总条数
+						allPages = Math.ceil(count / size); //总页数
+						page = page < 1 ? 1 : page > allPages ? allPages : page;
+					})
+					callback(null, "");
+				},
+				(callback) => {
+					coll.find({stuname:req.query.stuname}).sort({
+						_id: -1
+					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+						callback(null, data);
+					})
+				}
+			], (err, data) => {
+				res.render("home", {
+					username: req.session.username,
+					infoUrl: "borfind",
+					info: data[1],
+					page: page,
+					allPages: allPages
+				});
+				database.close();
+			})
+		})
+	})
+})
+
+//管理员进入图书推荐查看页面渲染
+router.get("/recfind",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("bookrec",(err,coll)=>{
+			//数据总条数
+			var count = 0;
+			//总页数
+			var allPages = 0;
+			//每页条数
+			var size = 5;
+			//页码
+			var page = req.query.page;
+			page = page ? page : 1;
+
+			//异步加载流程
+			async.series([
+				(callback) => {
+					coll.find({}).sort({
+						_id: -1
+					}).toArray((err, data) => {
+						count = data.length; //总条数
+						allPages = Math.ceil(count / size); //总页数
+						page = page < 1 ? 1 : page > allPages ? allPages : page;
+					})
+					callback(null, "");
+				},
+				(callback) => {
+					coll.find({}).sort({
+						_id: -1
+					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+						callback(null, data);
+					})
+				}
+			], (err, data) => {
+				if(data[1]==""){
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "recfind",
+						info:[],
+						page: 0,
+						allPages: 0
+					});
+				}else{
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "recfind",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+
+//管理员进入学生信息管理页面渲染
+router.get("/ad_stuinfo",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("stuinfo",(err,coll)=>{
+			//数据总条数
+			var count = 0;
+			//总页数
+			var allPages = 0;
+			//每页条数
+			var size = 5;
+			//页码
+			var page = req.query.page;
+			page = page ? page : 1;
+
+			//异步加载流程
+			async.series([
+				(callback) => {
+					coll.find({}).sort({
+						_id: -1
+					}).toArray((err, data) => {
+						count = data.length; //总条数
+						allPages = Math.ceil(count / size); //总页数
+						page = page < 1 ? 1 : page > allPages ? allPages : page;
+					})
+					callback(null, "");
+				},
+				(callback) => {
+					coll.find({}).sort({
+						_id: -1
+					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+						callback(null, data);
+					})
+				}
+			], (err, data) => {
+				if(data[1]==""){
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "ad_stuinfo",
+						info:[],
+						page: 0,
+						allPages: 0
+					});
+				}else{
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "ad_stuinfo",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+				}
 				database.close();
 			})
 		})

@@ -64,7 +64,7 @@
 				$.ajax({
 					type:"post",
 					url:"/users/sturec",
-					data:{brecname:$("#brecname").val(),brecuser:$("#brecuser").html(),brecwriter:$("#brecwriter").val(),brecpress:$("#brecpress").val(),brecrea:$("#brecrea").val()},
+					data:{brecname:$("#brecname").val(),brecuser:$("#brecuser").html(),brecwriter:$("#brecwriter").val(),brecpress:$("#brecpress").val(),brecrea:$(".brecrea").val()},
 					success:function(data){
 						data = JSON.parse(data);
 						if(data.code==1){

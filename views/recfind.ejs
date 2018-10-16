@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>管理员图书推荐查看</title>
+	<style type="text/css">
+		.breadcrumb{
+			width:1150px;
+			background: none;
+		}
+		h3{
+			text-align: center;
+			font-size:30px;
+			color: red;
+			margin-bottom: 20px;
+		}
+		.table{
+			width: 1000px;
+			margin: 30px auto;
+		}
+		.table th,.table td{
+			text-align: center;
+		}
+		.pagination{
+			margin-left: 80px;
+		}
+	</style>
+</head>
+<body>
+	<!--图书推荐导航-->
+	<ol class="breadcrumb">
+	  <li><a href="/borfind">借阅管理</a></li>
+	  <li><a href="/recfind">推荐查看</a></li>
+	</ol>
+	
+	<h3>学生图书推荐管理</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>推荐书名</th>
+				<th>推荐用户</th>
+				<th>书目作者</th>
+				<th>出版社</th>
+				<th>推荐理由</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% info.map(function(item){ %>
+				<tr>
+					<td><%- item.brecname %></td>
+					<td><%- item.brecuser %></td>
+					<td><%- item.brecwriter %></td>
+					<td><%- item.brecpress %></td>
+					<td><%- item.brecrea %></td>
+				</tr>
+			<% }) %>			
+		</tbody>
+	</table>
+	
+	<!--分页-->
+	  <ul class="pagination">
+	    <li>
+	      <a href="/recfind?page=<%- page<=1?1:parseInt(page)-1 %>" aria-label="Previous">
+	        <span aria-hidden="true">上一页</span>
+	      </a>
+	    </li>
+	    <% if(allPages>4){ %>
+	    		<li><a href="/recfind?page=1">1</a></li>
+			    <li><a href="/recfind?page=2">2</a></li>
+			    <li><a href="#">...</a></li>
+			    <li><a href="/recfind?page=<%- allPages-1 %>"><%- allPages-1 %></a></li>
+			    <li><a href="/recfind?page=<%- allPages %>"><%- allPages %></a></li>  	
+	    <% }else{ %>
+	    	<% for(let i=0;i<allPages;i++){ %>
+	    		<li><a href="/recfind?page=<%- i+1 %>"><%- i+1 %></a></li>
+	    	<% } %> 
+	    <% } %>	    
+	    <li>
+	      <a href="/recfind?page=<%- page>=allPages?allPages:parseInt(page)+1 %>" aria-label="Next">
+	        <span aria-hidden="true">下一页</span>
+	      </a>
+	    </li>
+	  </ul>
+	  <button class="btn btn-danger" style="margin-left:200px;margin-top: 30px;" id="deleteallrec_btn">全部删除</button>
+		<script type="text/javascript">
+			$(function(){
+				$("#deleteallrec_btn").click(function(){
+					$.ajax({
+						type:"post",
+						url:"/users/deleteallrec",
+						success:function(data){
+							data = JSON.parse(data);
+							if(data.code==1){
+								alert("删除成功！");
+								location.href = "/recfind";
+							}
+						}
+					});
+				})
+			})
+		</script>
+</body>
+</html>

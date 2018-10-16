@@ -25,7 +25,7 @@
 	
 	<!--信息表单区域-->
 	<h3>信息完善</h3>
-	<% if(data){ %>
+	<% if(data!=""){ %>
 		<div class="form-horizontal">
 		  <div class="form-group">
 		    <label for="stunum" class="col-sm-3 control-label">学号：</label>
@@ -178,7 +178,7 @@
             			//console.log(data);//{code:1,msg:"查询成功",stuadname:系统名}
             			if(data.code==1){
             				alert("信息已完善，准备跳转！");
-            				location.href = "/stuinfo_up";
+            				location.href = "/stuinfo_add";
             			}
             		}
             	});
