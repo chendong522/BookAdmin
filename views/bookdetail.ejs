@@ -69,7 +69,7 @@
 		<tbody>
 			<% info.map(function(item,i){ %>
 				<tr>
-					<td><%- i+1 %></td>
+					<td><%- (page-1)*size+i+1 %></td>
 					<td><%- item.newbname %></td>
 					<td><%- item.newbwriter %></td>
 					<td><%- item.newbpress %></td>

@@ -61,7 +61,7 @@
 		<tbody>
 			<% info.map(function(item,i){ %>
 				<tr>
-					<td><%- i+1 %></td>
+					<td><%- (page-1)*size+i+1 %></td>
 					<td><a data-toggle="modal" data-target="#myModal" data-look='<%- item._id %>'"><%- item.newbname %></a></td>
 					<td><%- item.newbwriter %></td>
 					<td><%- item.newbpress %></td>

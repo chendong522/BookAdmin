@@ -73,6 +73,7 @@ router.get("/bookdetail", (req, res) => {
 						infoUrl: "bookdetail",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -106,6 +107,7 @@ router.get("/bookdetail", (req, res) => {
 						infoUrl: "bookdetail",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -137,6 +139,7 @@ router.get("/bookdetail", (req, res) => {
 						infoUrl: "bookdetail",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -168,6 +171,7 @@ router.get("/bookdetail", (req, res) => {
 						infoUrl: "bookdetail",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -265,6 +269,7 @@ router.get("/stubor",(req,res)=>{
 									infoUrl: "stubor",
 									info: data[1],
 									page: page,
+									size:size,
 									allPages: allPages
 								});
 								database.close();
@@ -296,12 +301,12 @@ router.get("/stubor",(req,res)=>{
 									infoUrl: "stubor",
 									info: data[1],
 									page: page,
+									size:size,
 									allPages: allPages
 								});
 								database.close();
 							})
 						}else{
-							//异步加载流程
 							//异步加载流程
 							//书类查找加载渲染
 							async.series([
@@ -328,6 +333,7 @@ router.get("/stubor",(req,res)=>{
 									infoUrl: "stubor",
 									info: data[1],
 									page: page,
+									size:size,
 									allPages: allPages
 								});
 								database.close();
@@ -388,6 +394,7 @@ router.get("/borfind",(req,res)=>{
 						infoUrl: "borfind",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -418,6 +425,7 @@ router.get("/borfind",(req,res)=>{
 						infoUrl: "borfind",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 					database.close();
@@ -468,6 +476,7 @@ router.get("/recfind",(req,res)=>{
 						infoUrl: "recfind",
 						info:[],
 						page: 0,
+						size:size,
 						allPages: 0
 					});
 				}else{
@@ -476,6 +485,7 @@ router.get("/recfind",(req,res)=>{
 						infoUrl: "recfind",
 						info: data[1],
 						page: page,
+						size:size,
 						allPages: allPages
 					});
 				}
@@ -527,6 +537,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info:[],
 							page: 0,
+							size:size,
 							allPages: 0
 						});
 					}else{
@@ -535,6 +546,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info: data[1],
 							page: page,
+							size:size,
 							allPages: allPages
 						});
 					}
@@ -569,6 +581,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info:[],
 							page: 0,
+							size:size,
 							allPages: 0
 						});
 					}else{
@@ -577,6 +590,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info: data[1],
 							page: page,
+							size:size,
 							allPages: allPages
 						});
 					}
@@ -609,6 +623,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info:[],
 							page: 0,
+							size:size,
 							allPages: 0
 						});
 					}else{
@@ -617,6 +632,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info: data[1],
 							page: page,
+							size:size,
 							allPages: allPages
 						});
 					}
@@ -649,6 +665,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info:[],
 							page: 0,
+							size:size,
 							allPages: 0
 						});
 					}else{
@@ -657,6 +674,7 @@ router.get("/ad_stuinfo",(req,res)=>{
 							infoUrl: "ad_stuinfo",
 							info: data[1],
 							page: page,
+							size:size,
 							allPages: allPages
 						});
 					}
