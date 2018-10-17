@@ -68,7 +68,7 @@
 					<td><%- item.newbaddnum %></td>
 					<td>
 						<% if(item.newbaddnum<=0){ %>
-							
+							<button class="btn btn-danger" disabled>书已借完</button>
 						<% }else{ %>
 							<button type="button" class="btn btn-primary" data-id="<%- item._id %>" id="bookbor">申请借阅</button>
 						<% } %>
