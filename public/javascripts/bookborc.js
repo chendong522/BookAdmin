@@ -22,7 +22,7 @@ $("#bnameborfind_btn").click(function(){
 			data = JSON.parse(data);
 			//console.log(data);
 			if(data.code==1){
-				location.href = "/stubor2?bname="+$("#bnameborfind").val();
+				location.href = "/stubor?bname="+$("#bnameborfind").val();
 			}else{
 				alert("未找到相应图书信息");
 			}
@@ -40,7 +40,7 @@ $("#bkindborfind_btn").click(function(){
 			data = JSON.parse(data);
 			//console.log(data);
 			if(data.code==1){
-				location.href = "/stubor3?bkind="+$("#bkindborfind").val();
+				location.href = "/stubor?bkind="+$("#bkindborfind").val();
 			}else{
 				alert("未找到相应图书信息");
 			}

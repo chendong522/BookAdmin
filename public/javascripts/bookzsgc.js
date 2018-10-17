@@ -12,7 +12,7 @@ $(function() {
 				data = JSON.parse(data);
 				//console.log(data);
 				if(data.code == 1) {
-					location.href = "/findbook1?bid=" + $("#bidfind").val();
+					location.href = "/bookdetail?bid=" + $("#bidfind").val();
 				} else {
 					alert("未找到相应信息");
 				}
@@ -31,7 +31,7 @@ $(function() {
 			success:function(data){
 				data = JSON.parse(data);
 				if(data.code == 1) {
-					location.href = "/findbook2?bname=" + $("#bnamefind").val();
+					location.href = "/bookdetail?bname=" + $("#bnamefind").val();
 				} else {
 					alert("未找到相应信息");
 				}
@@ -48,7 +48,7 @@ $(function() {
 			success:function(data){
 				data = JSON.parse(data);
 				if(data.code == 1) {
-					location.href = "/findbook3?bkind=" + $("#bkindfind").val();
+					location.href = "/bookdetail?bkind=" + $("#bkindfind").val();
 				} else {
 					alert("未找到相应信息");
 				}

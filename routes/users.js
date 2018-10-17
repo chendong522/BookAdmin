@@ -319,7 +319,9 @@ router.get("/stuinfo_up1", (req, res) => {
 
 //学生信息修改
 router.post("/stuinfo_up2", (req, res) => {
+	console.log(req.body);
 	var stu_id = ObjectId(req.body.stu_id);
+	console.log(stu_id);
 	mongodb.connect(db_str, (err, database) => {
 		database.collection("stuinfo", (err, coll) => {
 			coll.update({
@@ -533,6 +535,95 @@ router.post("/deleteallrec",(req,res)=>{
 	mongodb.connect(db_str,(err,database)=>{
 		database.collection("bookrec",(err,coll)=>{
 			coll.deleteMany({},()=>{
+				res.send(JSON.stringify({code:1,msg:"删除成功"}));
+				database.close();
+			})
+		})
+	})
+})
+
+
+//管理员通过学号查询指定学生信息
+router.get("/stunumfind",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("stuinfo",(err,coll)=>{
+			coll.find({stunum:req.query.stunum}).toArray((err,data)=>{
+				if(data.length>0){
+					res.send(JSON.stringify({code:1,msg:"查询成功"}));
+				}else{
+					res.send(JSON.stringify({code:1,msg:"查询失败"}));
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+//姓名模糊查询
+router.get("/stunamefind",(req,res)=>{
+	var stuname = req.query.stuname;
+	var reg = new RegExp("^"+stuname);
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("stuinfo",(err,coll)=>{
+			coll.find({stuname:reg}).toArray((err,data)=>{
+				if(data.length>0){
+					res.send(JSON.stringify({code:1,msg:"查询成功"}));
+				}else{
+					res.send(JSON.stringify({code:1,msg:"查询失败"}));
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+//系别查询
+router.get("/studeptfind",(req,res)=>{
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("stuinfo",(err,coll)=>{
+			coll.find({studept:req.query.studept}).toArray((err,data)=>{
+				if(data.length>0){
+					res.send(JSON.stringify({code:1,msg:"查询成功"}));
+				}else{
+					res.send(JSON.stringify({code:1,msg:"查询失败"}));
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+
+
+//管理员修改学生信息，先获取信息
+router.post("/stuinfoup",(req,res)=>{
+	var _id = ObjectId(req.body.stu_id);
+	mongodb.connect(db_str, (err, database) => {
+		database.collection("stuinfo", (err, coll) => {
+			coll.find({
+				_id:_id
+			}).toArray((err, data) => {
+				if(data.length > 0) {
+					res.send(data[0]);
+				} else {
+					res.send({
+						code: 0,
+						msg: "无相应信息"
+					});
+				}
+				database.close();
+			})
+		})
+	})
+})
+
+//管理员删除学生信息
+router.post("/stuinfodelete",(req,res)=>{
+	var _id = ObjectId(req.body.stu_id);
+	console.log(_id);
+	mongodb.connect(db_str,(err,database)=>{
+		database.collection("stuinfo",(err,coll)=>{
+			coll.remove({_id:_id},()=>{
 				res.send(JSON.stringify({code:1,msg:"删除成功"}));
 			})
 		})

@@ -46,36 +46,134 @@ router.get("/bookdetail", (req, res) => {
 			//页码
 			var page = req.query.page;
 			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "bookdetail",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
+			if(req.query.bid){
+				//异步加载流程
+				//书编号查询加载
+				async.series([
+					(callback) => {
+						coll.find({newbid:req.query.bid}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({newbid:req.query.bid}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "bookdetail",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}else if(req.query.bname){
+				var bname = req.query.bname;
+				var reg = new RegExp("^"+bname);
+				//异步加载流程
+				//书名查询加载
+				async.series([
+					(callback) => {
+						coll.find({newbname:reg}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({newbname:reg}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "bookdetail",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}else if(req.query.bkind){
+				//异步加载流程
+				//书类别加载
+				async.series([
+					(callback) => {
+						coll.find({newbkind:req.query.bkind}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({newbkind:req.query.bkind}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "bookdetail",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}else{
+				//异步加载流程
+				//默认加载
+				async.series([
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "bookdetail",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}
+			
 		})
 	})
 })
@@ -87,163 +185,6 @@ router.get("/newbook", (req, res) => {
 		infoUrl: "newbook"
 	});
 })
-
-//图书查询成功显示结果
-router.get("/findbook1", (req, res) => {
-	//console.log(req.query.bid);
-	var id = req.query.bid; //获取查询图书的ID
-	mongodb.connect(db_str, (err, database) => {
-		database.collection("book", (err, coll) => {
-			//数据总条数
-			var count = 0;
-			//总页数
-			var allPages = 0;
-			//每页条数
-			var size = 5;
-			//页码
-			var page = req.query.page;
-			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({
-						newbid: id
-					}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({
-						newbid: id
-					}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "findbook",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
-		})
-	})
-})
-
-router.get("/findbook2", (req, res) => {
-	var bname = querystring.unescape(req.query.bname);
-	var reg = new RegExp("^" + bname); //构造函数创建包含变量的正则
-	mongodb.connect(db_str, (err, database) => {
-		database.collection("book", (err, coll) => {
-			//数据总条数
-			var count = 0;
-			//总页数
-			var allPages = 0;
-			//每页条数
-			var size = 5;
-			//页码
-			var page = req.query.page;
-			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({
-						newbname: reg
-					}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({
-						newbname: reg
-					}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "findbook",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
-		})
-	})
-})
-
-router.get("/findbook3", (req, res) => {
-	var bkind = querystring.unescape(req.query.bkind);
-	mongodb.connect(db_str, (err, database) => {
-		database.collection("book", (err, coll) => {
-			//数据总条数
-			var count = 0;
-			//总页数
-			var allPages = 0;
-			//每页条数
-			var size = 5;
-			//页码
-			var page = req.query.page;
-			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({
-						newbkind: bkind
-					}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({
-						newbkind: bkind
-					}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "findbook",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
-		})
-	})
-})
-
 
 //学生个人信息添加页面渲染
 router.get("/stuinfo_add",(req,res)=>{
@@ -268,7 +209,7 @@ router.get("/stuinfo_up",(req,res)=>{
 })
 
 
-//图书借阅界面渲染
+//学生图书借阅界面渲染
 router.get("/stubor",(req,res)=>{
 	mongodb.connect(db_str,(err,database)=>{
 		//判断该用户借阅是否达到上限
@@ -284,141 +225,6 @@ router.get("/stubor",(req,res)=>{
 					});
 					database.close();
 				}else{
-					//未达到上限
-					database.collection("book",(err,coll)=>{
-						coll.find({}).toArray((err,data)=>{
-							//数据总条数
-							var count = 0;
-							//总页数
-							var allPages = 0;
-							//每页条数
-							var size = 6;
-							//页码
-							var page = req.query.page;
-							page = page ? page : 1;
-				
-							//异步加载流程
-							async.series([
-								(callback) => {
-									coll.find({}).sort({
-										_id: -1
-									}).toArray((err, data) => {
-										count = data.length; //总条数
-										allPages = Math.ceil(count / size); //总页数
-										page = page < 1 ? 1 : page > allPages ? allPages : page;
-									})
-									callback(null, "");
-								},
-								(callback) => {
-									coll.find({}).sort({
-										_id: -1
-									}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-										callback(null, data);
-									})
-								}
-							], (err, data) => {
-								res.render("home", {
-									username: req.session.username,
-									infoUrl: "stubor",
-									info: data[1],
-									page: page,
-									allPages: allPages
-								});
-								database.close();
-							})
-						})
-					})
-				}
-			})
-		})
-		
-	})
-})
-
-//书名查找借阅图书页面渲染
-router.get("/stubor2",(req,res)=>{
-	mongodb.connect(db_str,(err,database)=>{
-		//判断该用户借阅是否达到上限
-		database.collection("bookbor",(err,coll)=>{
-			coll.find({stuadname:req.session.username}).toArray((err,data)=>{
-				if(data.length>=5){
-					res.render("home", {
-						username: req.session.username,
-						infoUrl: "stubor",
-						info:[],
-						allPages:0,
-						page:0
-					});
-					database.close();
-				}else{
-					//未达到上限
-					var bname = querystring.unescape(req.query.bname);
-					var reg = new RegExp("^"+bname);
-					database.collection("book",(err,coll)=>{
-							//数据总条数
-							var count = 0;
-							//总页数
-							var allPages = 0;
-							//每页条数
-							var size = 6;
-							//页码
-							var page = req.query.page;
-							page = page ? page : 1;
-				
-							//异步加载流程
-							async.series([
-								(callback) => {
-									coll.find({newbname:reg}).sort({
-										_id: -1
-									}).toArray((err, data) => {
-										count = data.length; //总条数
-										allPages = Math.ceil(count / size); //总页数
-										page = page < 1 ? 1 : page > allPages ? allPages : page;
-									})
-									callback(null, "");
-								},
-								(callback) => {
-									coll.find({newbname:reg}).sort({
-										_id: -1
-									}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-										callback(null, data);
-									})
-								}
-							], (err, data) => {
-								res.render("home", {
-									username: req.session.username,
-									infoUrl: "stubor",
-									info: data[1],
-									page: page,
-									allPages: allPages
-								});
-								database.close();
-							})
-					})
-				}
-			})
-		})
-	})
-})
-
-//书类别查找借阅图书页面渲染
-router.get("/stubor3",(req,res)=>{
-	mongodb.connect(db_str,(err,database)=>{
-		//判断该用户借阅是否达到上限
-		database.collection("bookbor",(err,coll)=>{
-			coll.find({stuadname:req.session.username}).toArray((err,data)=>{
-				if(data.length>=5){
-					res.render("home", {
-						username: req.session.username,
-						infoUrl: "stubor",
-						info:[],
-						allPages:0,
-						page:0
-					});
-					database.close();
-				}else{
-					//未达到上限
-					var bkind = querystring.unescape(req.query.bkind);
 					database.collection("book",(err,coll)=>{
 						//数据总条数
 						var count = 0;
@@ -429,21 +235,25 @@ router.get("/stubor3",(req,res)=>{
 						//页码
 						var page = req.query.page;
 						page = page ? page : 1;
-			
-						//异步加载流程
-						async.series([
-							(callback) => {
-								coll.find({newbkind:bkind}).sort({
-									_id: -1
-								}).toArray((err, data) => {
-									count = data.length; //总条数
-									allPages = Math.ceil(count / size); //总页数
-									page = page < 1 ? 1 : page > allPages ? allPages : page;
-								})
-								callback(null, "");
+						//未达到上限
+						if(req.query.bname){
+							var bname = req.query.bname;
+							var reg = new RegExp("^"+bname);
+							//异步加载流程
+							//书名查找加载渲染
+							async.series([
+								(callback) => {
+									coll.find({newbname:reg}).sort({
+										_id: -1
+									}).toArray((err, data) => {
+										count = data.length; //总条数
+										allPages = Math.ceil(count / size); //总页数
+										page = page < 1 ? 1 : page > allPages ? allPages : page;
+									})
+									callback(null, "");
 								},
 								(callback) => {
-									coll.find({newbkind:bkind}).sort({
+									coll.find({newbname:reg}).sort({
 										_id: -1
 									}).limit(size).skip((page - 1) * size).toArray((err, data) => {
 										callback(null, data);
@@ -459,13 +269,76 @@ router.get("/stubor3",(req,res)=>{
 								});
 								database.close();
 							})
+						}else if(req.query.bkind){
+							//异步加载流程
+							//书类查找加载渲染
+							async.series([
+								(callback) => {
+									coll.find({newbkind:req.query.bkind}).sort({
+										_id: -1
+									}).toArray((err, data) => {
+										count = data.length; //总条数
+										allPages = Math.ceil(count / size); //总页数
+										page = page < 1 ? 1 : page > allPages ? allPages : page;
+									})
+									callback(null, "");
+								},
+								(callback) => {
+									coll.find({newbkind:req.query.bkind}).sort({
+										_id: -1
+									}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+										callback(null, data);
+									})
+								}
+							], (err, data) => {
+								res.render("home", {
+									username: req.session.username,
+									infoUrl: "stubor",
+									info: data[1],
+									page: page,
+									allPages: allPages
+								});
+								database.close();
+							})
+						}else{
+							//异步加载流程
+							//异步加载流程
+							//书类查找加载渲染
+							async.series([
+								(callback) => {
+									coll.find({}).sort({
+										_id: -1
+									}).toArray((err, data) => {
+										count = data.length; //总条数
+										allPages = Math.ceil(count / size); //总页数
+										page = page < 1 ? 1 : page > allPages ? allPages : page;
+									})
+									callback(null, "");
+								},
+								(callback) => {
+									coll.find({}).sort({
+										_id: -1
+									}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+										callback(null, data);
+									})
+								}
+							], (err, data) => {
+								res.render("home", {
+									username: req.session.username,
+									infoUrl: "stubor",
+									info: data[1],
+									page: page,
+									allPages: allPages
+								});
+								database.close();
+							})
+						}
 					})
 				}
 			})
 		})
 	})
 })
-
 
 //图书推荐页面渲染
 router.get("/sturec",(req,res)=>{
@@ -486,83 +359,71 @@ router.get("/borfind",(req,res)=>{
 			//页码
 			var page = req.query.page;
 			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "borfind",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
-		})
-	})
-})
-
-//通过查询渲染图书借阅管理界面
-router.get("/borfind1",(req,res)=>{
-	mongodb.connect(db_str,(err,database)=>{
-		database.collection("bookbor",(err,coll)=>{
-			//数据总条数
-			var count = 0;
-			//总页数
-			var allPages = 0;
-			//每页条数
-			var size = 5;
-			//页码
-			var page = req.query.page;
-			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({stuname:req.query.stuname}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({stuname:req.query.stuname}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				res.render("home", {
-					username: req.session.username,
-					infoUrl: "borfind",
-					info: data[1],
-					page: page,
-					allPages: allPages
-				});
-				database.close();
-			})
+			
+			//姓名查找查看借阅情况
+			if(req.query.stuname){
+				//异步加载流程
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({stuname:req.query.stuname}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({stuname:req.query.stuname}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "borfind",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}else{
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					res.render("home", {
+						username: req.session.username,
+						infoUrl: "borfind",
+						info: data[1],
+						page: page,
+						allPages: allPages
+					});
+					database.close();
+				})
+			}
+			
 		})
 	})
 })
@@ -638,48 +499,178 @@ router.get("/ad_stuinfo",(req,res)=>{
 			//页码
 			var page = req.query.page;
 			page = page ? page : 1;
-
-			//异步加载流程
-			async.series([
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).toArray((err, data) => {
-						count = data.length; //总条数
-						allPages = Math.ceil(count / size); //总页数
-						page = page < 1 ? 1 : page > allPages ? allPages : page;
-					})
-					callback(null, "");
-				},
-				(callback) => {
-					coll.find({}).sort({
-						_id: -1
-					}).limit(size).skip((page - 1) * size).toArray((err, data) => {
-						callback(null, data);
-					})
-				}
-			], (err, data) => {
-				if(data[1]==""){
-					res.render("home", {
-						username: req.session.username,
-						infoUrl: "ad_stuinfo",
-						info:[],
-						page: 0,
-						allPages: 0
-					});
-				}else{
-					res.render("home", {
-						username: req.session.username,
-						infoUrl: "ad_stuinfo",
-						info: data[1],
-						page: page,
-						allPages: allPages
-					});
-				}
-				database.close();
-			})
+			
+			if(req.query.stunum){
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({stunum:req.query.stunum}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({stunum:req.query.stunum}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					if(data[1]==""){
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info:[],
+							page: 0,
+							allPages: 0
+						});
+					}else{
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info: data[1],
+							page: page,
+							allPages: allPages
+						});
+					}
+					database.close();
+				})
+			}else if(req.query.stuname){
+				var stuname = req.query.stuname;
+				var reg = new RegExp("^"+stuname);
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({stuname:reg}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({stuname:reg}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					if(data[1]==""){
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info:[],
+							page: 0,
+							allPages: 0
+						});
+					}else{
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info: data[1],
+							page: page,
+							allPages: allPages
+						});
+					}
+					database.close();
+				})
+			}else if(req.query.studept){
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({studept:req.query.studept}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({studept:req.query.studept}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					if(data[1]==""){
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info:[],
+							page: 0,
+							allPages: 0
+						});
+					}else{
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info: data[1],
+							page: page,
+							allPages: allPages
+						});
+					}
+					database.close();
+				})
+			}else{
+				//异步加载流程
+				async.series([
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).toArray((err, data) => {
+							count = data.length; //总条数
+							allPages = Math.ceil(count / size); //总页数
+							page = page < 1 ? 1 : page > allPages ? allPages : page;
+						})
+						callback(null, "");
+					},
+					(callback) => {
+						coll.find({}).sort({
+							_id: -1
+						}).limit(size).skip((page - 1) * size).toArray((err, data) => {
+							callback(null, data);
+						})
+					}
+				], (err, data) => {
+					if(data[1]==""){
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info:[],
+							page: 0,
+							allPages: 0
+						});
+					}else{
+						res.render("home", {
+							username: req.session.username,
+							infoUrl: "ad_stuinfo",
+							info: data[1],
+							page: page,
+							allPages: allPages
+						});
+					}
+					database.close();
+				})
+			}
 		})
 	})
+})
+
+
+//馆藏图书图表展示页面渲染
+router.get("/bookcharts",(req,res)=>{
+	res.render("home",{username:req.session.username,infoUrl:"bookcharts"});
 })
 
 module.exports = router;

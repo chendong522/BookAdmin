@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>馆藏图书统计图</title>
+	<style type="text/css">
+		.breadcrumb {
+			width: 1150px;
+			background: none;
+		}
+		
+		h3 {
+			text-align: center;
+			font-size: 30px;
+			color: red;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<!--学生信息管理导航-->
+	<ol class="breadcrumb">
+		<li>
+			<a href="/bookcharts">学生信息管理</a>
+		</li>
+	</ol>
+	
+	<h3>馆藏图书数据</h3>
+	<div id="container" style="height: 450px"></div>
+	<script type="text/javascript">
+		var chart = Highcharts.chart('container', {
+		chart: {
+			type: 'pie',
+			options3d: {
+				enabled: true,
+				alpha: 45,
+				beta: 0
+			}
+		},
+		title: {
+			text: '2018年XX图书书馆馆藏图书占比'
+		},
+		tooltip: {
+			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				depth: 35,
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}
+		},
+		series: [{
+			type: 'pie',
+			name: '浏览器占比',
+			data: [
+				['文学类',   45.0],
+				['科幻类',       26.8],
+				{
+					name: '学习辅助',
+					y: 12.8,
+					sliced: true,
+					selected: true
+				},
+				['报刊杂志',    8.5],
+				['艺术类',     6.2]
+			]
+		}]
+	});
+	</script>
+</body>
+</html>

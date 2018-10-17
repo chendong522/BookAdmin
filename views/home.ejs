@@ -12,6 +12,7 @@
 		<script src="/javascripts/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>		
 		<script src="/javascripts/xheditor/xheditor-1.2.2.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/javascripts/xheditor/xheditor_lang/zh-cn.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 	</head>
 	<body>
 		<header>
@@ -21,14 +22,13 @@
 			      <a class="navbar-brand" style="color:#009788;font-weight: 600;font-size: 28px;text-indent: 2px;">图书管理系统</a>
 			    </div>
 			    <!--管理员与学生登录系统导航界面改变-->
-			    <% if(username==111){ %>
+			    <% if(username=="admin"){ %>
 			    	<ul class="nav navbar-nav">
 			    		<li><a href="/home">系统首页</a></li>
 				        <li><a href="/bookdetail">图书管理</a></li>
 				        <li><a href="/borfind">借阅管理</a></li>
-				        <li><a href="/ad_stuinfo">学生管理</a></li>
-				        <!--<li><a href="#">Link</a></li>
-				        <li><a href="#">Link</a></li>-->
+				        <li><a href="/ad_stuinfo">学生信息管理</a></li>
+				        <li><a href="/bookcharts">馆藏图书统计</a></li>
 				      </ul>
 				      <div class="navbar-form navbar-left">
 				        <div class="form-group">
@@ -62,7 +62,7 @@
 		</header>
 		<section>
 			<aside style="width: 200px;">
-				<% if(username==111){ %>
+				<% if(username=="admin"){ %>
 					<!--管理员登录导航块-->
 					<ul class="list-group">
 						<li class="list-group-item" onclick="location.href='/home'"><b style="background:#009788;">系统首页<span class="glyphicon glyphicon-menu-right"></span></b></li>
@@ -80,11 +80,11 @@
 									  <li class="list-group-item" onclick="location.href='recfind'">推荐查看<span class="glyphicon glyphicon-menu-right"></span></li>
 								 </ul>
 						  </li>
-						  <li class="list-group-item">
-							  	<b>学生管理<span class="glyphicon glyphicon-menu-down"></span></b>
-							  	<ul class="list-group">
-									  <li class="list-group-item" onclick="location.href='ad_stuinfo'">学生信息管理<span class="glyphicon glyphicon-menu-right"></span></li>
-								 </ul>
+						  <li class="list-group-item" onclick="location.href='/ad_stuinfo'">
+							  	<b>学生信息管理<span class="glyphicon glyphicon-menu-right"></span></b>
+						  </li>
+						  <li class="list-group-item" onclick="location.href='/bookcharts'">
+							  	<b>馆藏图书统计<span class="glyphicon glyphicon-menu-right"></span></b>
 						  </li>
 					</ul>
 					<% }else{ %>
@@ -101,8 +101,8 @@
 							  <li class="list-group-item">
 								  	<b>图书借阅<span class="glyphicon glyphicon-menu-down"></span></b>
 								  	<ul class="list-group">
-										  <li class="list-group-item" onclick="location.href='stubor'">图书查询<span class="glyphicon glyphicon-menu-right"></span></li>
-										  <li class="list-group-item" onclick="location.href='sturec'">图书推荐<span class="glyphicon glyphicon-menu-right"></span></li>
+										  <li class="list-group-item" onclick="location.href='/stubor'">图书查询<span class="glyphicon glyphicon-menu-right"></span></li>
+										  <li class="list-group-item" onclick="location.href='/sturec'">图书推荐<span class="glyphicon glyphicon-menu-right"></span></li>
 									 </ul>
 							  </li>
 						</ul>
@@ -129,7 +129,7 @@
 						success:function(data){
 							data = JSON.parse(data);
 							if(data.code == 1) {
-								location.href = "/findbook2?bname=" + $("#home_findbook").val();
+								location.href = "/bookdetail?bname=" + $("#home_findbook").val();
 							} else {
 								alert("未找到相应信息");
 							}

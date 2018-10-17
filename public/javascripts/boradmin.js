@@ -52,7 +52,7 @@ $(function(){
 			success:function(data){
 				data = JSON.parse(data);
 				if(data.code==1){
-					location.href = "/borfind1?stuname="+$("#boruserfind").val();
+					location.href = "/borfind?stuname="+$("#boruserfind").val();
 				}else{
 					alert("无相应数据");
 				}
